@@ -1,0 +1,15 @@
+{
+  "name": "lti-talent-tracking",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run start --prefix frontend\"",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run start --prefix frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  },
+  "dependencies": {
+    "@mkatogui/universal-design-system": "^0.4.2"
+  }
+}

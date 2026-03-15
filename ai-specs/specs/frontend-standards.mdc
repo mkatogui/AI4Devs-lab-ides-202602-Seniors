@@ -1,0 +1,473 @@
+---
+description: Frontend development standards, best practices, and conventions for the LTI React application including component patterns, state management, UI/UX guidelines, and testing practices
+globs: ["frontend/src/**/*.{js,jsx,ts,tsx}", "frontend/tsconfig.json", "frontend/package.json", "frontend/public/index.html"]
+alwaysApply: true
+---
+
+# Frontend Project Configuration and Best Practices
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Technology Stack](#technology-stack)
+  - [Core Technologies](#core-technologies)
+  - [UI Framework](#ui-framework)
+  - [State Management & Data Flow](#state-management--data-flow)
+  - [Testing Framework](#testing-framework)
+  - [Development Tools](#development-tools)
+- [Project Structure](#project-structure)
+- [Coding Standards](#coding-standards)
+  - [Language and Naming Conventions](#language-and-naming-conventions)
+  - [Component Conventions](#component-conventions)
+  - [State Management](#state-management)
+  - [Service Layer Architecture](#service-layer-architecture)
+- [UI/UX Standards](#uiux-standards)
+  - [UDS (mandatory)](#universal-design-system-uds--mandatory)
+  - [Form Handling](#form-handling)
+  - [Navigation Patterns](#navigation-patterns)
+  - [Accessibility](#accessibility)
+- [Testing Standards](#testing-standards)
+  - [Unit and component testing (Jest + RTL)](#unit-and-component-testing-jest--rtl)
+  - [Test Organization](#test-organization)
+- [Configuration Standards](#configuration-standards)
+  - [TypeScript Configuration](#typescript-configuration)
+  - [ESLint Configuration](#eslint-configuration)
+  - [Environment Configuration](#environment-configuration)
+- [Performance Best Practices](#performance-best-practices)
+  - [Component Optimization](#component-optimization)
+  - [Bundle Optimization](#bundle-optimization)
+  - [API Efficiency](#api-efficiency)
+- [Development Workflow](#development-workflow)
+  - [Git Workflow](#git-workflow)
+  - [Development Scripts](#development-scripts)
+  - [Code Quality](#code-quality)
+- [Migration Strategy](#migration-strategy)
+  - [TypeScript Migration](#typescript-migration)
+  - [Component Modernization](#component-modernization)
+
+---
+
+## Overview
+
+This document outlines the best practices, conventions, and standards used in the LTI frontend application. These practices ensure code consistency, maintainability, and optimal development experience.
+
+## Technology Stack
+
+### Core Technologies
+- **React 18**: Modern React with functional components and hooks
+- **TypeScript**: For type safety and better development experience
+- **Create React App**: Build tooling and development server (frontend runs at **http://localhost:3000**)
+- **React Router DOM**: Client-side routing and navigation (add when implementing dashboard and add-candidate flow)
+
+### UI Framework — Universal Design System (UDS)
+- **@mkatogui/uds-react**: 43 accessible components (Button, Card, Input, Modal, etc.) and styles. Use these for all UI; do not introduce Bootstrap or other component libraries.
+- **@mkatogui/uds-tokens**: Design tokens (CSS custom properties) for theming.
+- Set the active palette via `data-theme` on `<html>` (this project uses `data-theme="corporate"`). Available palettes: `minimal-saas`, `corporate`, `dashboard`, `ai-futuristic`, `gradient-startup`, and others (see [UDS docs](https://mkatogui.github.io/universal-design-system/)). Can be set in `frontend/public/index.html` or switched at runtime.
+- The recruiter dashboard is the main view; all frontend work must use UDS for consistency and accessibility.
+
+### State Management & Data Flow
+- **React Hooks**: useState, useEffect, useContext for local and shared state
+- **React Router DOM**: Client-side routing (used in this project)
+- **Fetch or axios**: HTTP client for API communication (use project preference)
+
+### Testing Framework
+- **Jest**: Unit testing (via Create React App)
+- **React Testing Library**: Component testing utilities
+- **E2E (Cypress/Playwright)**: Optional; add when needed; follow same UDS and a11y rules
+
+### Development Tools
+- **ESLint**: Code linting with React-specific rules
+- **TypeScript**: Static type checking
+- **Web Vitals**: Performance monitoring
+
+## Project Structure
+
+```
+frontend/
+├── public/
+│   └── index.html       # Single HTML entry (app shell, UDS data-theme)
+├── src/
+│   ├── components/     # Reusable UI components (e.g. AppLayout)
+│   ├── context/       # React context (e.g. AuthContext)
+│   ├── pages/          # Route-level pages (Dashboard, Login, AddCandidate)
+│   ├── services/       # API service layer
+│   ├── App.tsx         # Root component and routes
+│   ├── index.tsx       # Entry: UDS styles, ReactDOM, BrowserRouter
+│   └── index.css       # Global styles
+├── package.json        # Dependencies and scripts
+└── tsconfig.json       # TypeScript configuration
+```
+
+## Coding Standards
+
+### Naming Conventions
+
+- **Component Naming**: Use PascalCase for React components (e.g., `CandidateCard`, `PositionDetails`, `RecruiterDashboard`)
+- **Variable Naming**: Use camelCase for variables and functions (e.g., `candidateId`, `handleSubmit`, `fetchPositions`)
+- **Constants Naming**: Use UPPER_SNAKE_CASE for constants (e.g., `MAX_CANDIDATES_PER_PAGE`, `API_BASE_URL`)
+- **Type/Interface Naming**: Use PascalCase for types and interfaces (e.g., `CandidateData`, `PositionProps`, `ICandidateService`)
+- **File Naming**: Use PascalCase for component files (e.g., `CandidateCard.tsx`, `PositionDetails.tsx`) and camelCase for utility files (e.g., `candidateService.js`, `apiUtils.ts`)
+- **CSS Class Naming**: Use kebab-case for CSS classes (e.g., `candidate-card`, `position-details`)
+- **Hook Naming**: Use camelCase starting with "use" prefix (e.g., `useCandidate`, `usePositionData`, `useFormValidation`)
+
+**Examples:**
+
+```typescript
+// Good: All in English
+import React, { useState, useEffect } from 'react';
+
+type CandidateCardProps = {
+    candidate: Candidate;
+    index: number;
+    onClick: (candidate: Candidate) => void;
+};
+
+const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, index, onClick }) => {
+    const [isLoading, setIsLoading] = useState(false);
+    
+    // Handle candidate card click event
+    const handleCardClick = () => {
+        onClick(candidate);
+    };
+    
+    return (
+        <div className="candidate-card" onClick={handleCardClick}>
+            {/* Component JSX */}
+        </div>
+    );
+};
+
+// Avoid: Non-English comments or names
+const TarjetaCandidato: React.FC<PropsTarjetaCandidato> = ({ candidato, indice, alHacerClic }) => {
+    const [estaCargando, setEstaCargando] = useState(false);
+    
+    // Manejar evento de clic en la tarjeta de candidato
+    const manejarClicTarjeta = () => {
+        alHacerClic(candidato);
+    };
+    
+    return (
+        <div className="tarjeta-candidato" onClick={manejarClicTarjeta}>
+            {/* JSX del componente */}
+        </div>
+    );
+};
+```
+
+**Error Messages and Console Logs:**
+
+```typescript
+// Good: English error messages
+catch (error) {
+    console.error('Failed to fetch candidates:', error);
+    setError('Unable to load candidates. Please try again later.');
+}
+
+// Avoid: Non-English messages
+catch (error) {
+    console.error('Error al obtener candidatos:', error);
+    setError('No se pudieron cargar los candidatos. Por favor, inténtelo de nuevo más tarde.');
+}
+```
+
+**Service Layer Examples:**
+
+```typescript
+// Good: English naming in services
+export const candidateService = {
+    getAllCandidates: async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/candidates`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching candidates:', error);
+            throw error;
+        }
+    }
+};
+
+// Avoid: Non-English naming
+export const servicioCandidatos = {
+    obtenerTodosLosCandidatos: async () => {
+        try {
+            const respuesta = await axios.get(`${API_BASE_URL}/candidates`);
+            return respuesta.data;
+        } catch (error) {
+            console.error('Error al obtener candidatos:', error);
+            throw error;
+        }
+    }
+};
+```
+
+### Component Conventions
+
+#### Functional Components
+- **Always use functional components** with hooks instead of class components
+- Use **TypeScript for new components** when possible
+- Keep **JavaScript for legacy components** until migration
+
+```typescript
+// Preferred - TypeScript functional component
+import React, { useState, useEffect } from 'react';
+
+type Position = {
+    id: number;
+    title: string;
+    status: 'Open' | 'Contratado' | 'Cerrado' | 'Borrador';
+};
+
+const Positions: React.FC = () => {
+    const [positions, setPositions] = useState<Position[]>([]);
+    // Component logic
+};
+```
+
+#### Component Props
+- **Define TypeScript interfaces** for component props when using TypeScript
+- Use **destructuring** for props
+- Include **default values** where appropriate
+
+```typescript
+type CandidateCardProps = {
+    candidate: Candidate;
+    index: number;
+    onClick: (candidate: Candidate) => void;
+};
+
+const CandidateCard: React.FC<CandidateCardProps> = ({ candidate, index, onClick }) => {
+    // Component implementation
+};
+```
+
+### State Management
+
+#### Local State with Hooks
+- Use **useState** for component-level state
+- Use **useEffect** for side effects and data fetching
+- **Extract custom hooks** for reusable stateful logic
+
+```javascript
+const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    status: 'Borrador'
+});
+
+const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+        ...prev,
+        [name]: value
+    }));
+};
+```
+
+#### Loading and Error States
+- **Always handle loading states** for async operations
+- **Implement error handling** with user-friendly messages
+- **Use UDS components** (e.g. Alert/Message if available) or clear inline messages for feedback
+
+```javascript
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState('');
+const [success, setSuccess] = useState('');
+
+// In async function
+try {
+    setLoading(true);
+    const data = await apiCall();
+    setSuccess('Operation completed successfully');
+} catch (error) {
+    setError('Error message: ' + error.message);
+} finally {
+    setLoading(false);
+}
+```
+
+### Service Layer Architecture
+
+#### API Services
+- **Centralize API calls** in service files
+- Use **axios** for HTTP requests
+- **Export service objects** with grouped methods
+- **Handle errors at service level** when appropriate
+
+```javascript
+import axios from 'axios';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3010';
+
+export const positionService = {
+    getAllPositions: async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/positions`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching positions:', error);
+            throw error;
+        }
+    },
+    
+    updatePosition: async (id, positionData) => {
+        try {
+            const response = await axios.put(`${API_BASE_URL}/positions/${id}`, positionData);
+            return response.data;
+        } catch (error) {
+            console.error('Error updating position:', error);
+            throw error;
+        }
+    }
+};
+```
+
+## UI/UX Standards
+
+### Universal Design System (UDS) — mandatory
+- Use **@mkatogui/uds-react** for all UI components (Button, Card, Input, Modal, etc.). Do not use Bootstrap or other component libraries.
+- Import **@mkatogui/uds-tokens** (design tokens) so themes apply correctly.
+- Set **data-theme** on `<html>` to choose palette (this project uses `data-theme="corporate"`). See project [README](../../README.md) and [UDS documentation](https://mkatogui.github.io/universal-design-system/).
+- Build the recruiter dashboard and add-candidate form with UDS components for accessibility and consistent design.
+
+```javascript
+// Example: use UDS components
+import { Button, Card, Input } from '@mkatogui/uds-react';
+import '@mkatogui/uds-tokens';
+```
+
+### Form Handling
+- Use **controlled components** for form inputs
+- Implement **real-time validation** where appropriate
+- **Disable submit buttons** during form submission
+- **Clear form state** after successful submission
+- Use **UDS form components** (Input, etc.) from `@mkatogui/uds-react`
+
+```javascript
+// Use UDS Input and Button; structure may vary by UDS API
+<form onSubmit={handleSubmit}>
+    <Input label="Title *" name="title" value={formData.title} onChange={handleInputChange} required />
+    <Button type="submit" disabled={saving}>
+        {saving ? 'Saving...' : 'Save'}
+    </Button>
+</form>
+```
+
+### Navigation Patterns
+- Use **React Router** for all navigation
+- **Implement breadcrumbs** with back navigation
+- Use **programmatic navigation** with useNavigate hook
+
+```javascript
+import { useNavigate } from 'react-router-dom';
+
+const navigate = useNavigate();
+
+// Navigation examples
+<Button variant="link" onClick={() => navigate('/')}>
+    ← Back to Dashboard
+</Button>
+```
+
+### Accessibility
+- Include **aria-label** attributes for interactive elements
+- Use **semantic HTML** elements
+- Ensure **keyboard navigation** support
+- Provide **alternative text** for images
+
+```tsx
+<Input
+    type="text"
+    placeholder="Search by title"
+    aria-label="Search positions by title"
+/>
+```
+
+## Testing Standards
+
+### Unit and component testing (Jest + RTL)
+- **Jest** and **React Testing Library** are the primary testing stack (Create React App default).
+- Test user-facing behavior; use **data-testid** where needed for stable selectors.
+- **Organize tests** by feature or component (e.g. `App.test.tsx`, `Login.test.tsx`).
+- Mock API calls; keep tests fast and deterministic.
+- **E2E (Cypress/Playwright)**: Not required in this project today; if added later, align with UDS and a11y.
+
+### Test Organization
+- **Group related tests** with describe blocks
+- **Use descriptive test names** that explain the expected behavior
+- **Test both success and error scenarios**
+- **Include edge cases** and validation testing
+
+## Configuration Standards
+
+### TypeScript Configuration
+- Enable **strict mode** for type checking
+- Use **path mapping** with "@/*" for cleaner imports when configured
+- **types**: include `"node"` and `"jest"` as needed (CRA/tsconfig defaults)
+- Target and module follow Create React App unless overridden
+
+### ESLint Configuration
+- Extend **React App** configuration
+- Include **Jest rules** for testing
+- **Automatic code formatting** and error detection
+- **Consistent code style** across the project
+
+### Environment Configuration
+- Use **environment variables** for API URLs (e.g. `REACT_APP_API_URL` in `frontend/.env`)
+- **Separate configurations** for development and production
+- See [development_guide.md](./development_guide.md) for backend URL (default `http://localhost:3010`) and database setup.
+
+## Performance Best Practices
+
+### Component Optimization
+- **Lazy load** components when appropriate
+- **Memoize expensive calculations** with useMemo
+- **Avoid unnecessary re-renders** with useCallback
+- **Extract reusable logic** into custom hooks
+
+### Bundle Optimization
+- **Tree shaking** enabled through Create React App
+- **Code splitting** at route level
+- **Optimize images** and static assets
+- **Monitor bundle size** with build tools
+
+### API Efficiency
+- **Implement proper error handling** for network requests
+- **Cache API responses** where appropriate
+- **Use loading states** to improve perceived performance
+- **Batch API calls** when possible
+
+## Development Workflow
+
+- **Feature Branches**: Develop features in separate branches, adding descriptive suffix "-frontend" to allow working in parallel and avoid conflicts or collisions
+- **Descriptive Commits**: Write descriptive commit messages in English
+- **Code Review**: Code review before merging
+- **Small Branches**: Keep branches small and focused
+
+### Development Scripts
+```bash
+npm start          # Development server (http://localhost:3000)
+npm test           # Run unit tests (Jest + RTL)
+npm run build      # Production build
+```
+
+### Code Quality
+- **ESLint validation** before commits
+- **TypeScript compilation** without errors
+- **All tests passing** before deployment
+- **Performance monitoring** with Web Vitals
+
+## Migration Strategy
+
+### TypeScript Migration
+- **Gradual migration** from JavaScript to TypeScript
+- **New components in TypeScript** by default
+- **Maintain existing JavaScript** components until planned refactor
+- **Add types incrementally** to existing code
+
+### Component Modernization
+- **Functional components** over class components
+- **Hooks** instead of lifecycle methods
+- **UDS (@mkatogui/uds-react)** components for all UI; no Bootstrap or other component libraries
+- **Responsive design** and accessibility (UDS is built for it)
+
+This document serves as the foundation for maintaining code quality and consistency across the LTI frontend application. All team members should follow these practices to ensure a maintainable and scalable codebase.

@@ -14,7 +14,43 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  name         String?
+  passwordHash String?
+}
+
+model Candidate {
+  id          Int       @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  email       String    @unique
+  phone       String?
+  address     String?
+  cvFilePath  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  educations      Education[]
+  workExperiences WorkExperience[]
+}
+
+model Education {
+  id          Int       @id @default(autoincrement())
+  institution String
+  title       String
+  startDate   DateTime
+  endDate     DateTime?
+  candidateId Int
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+}
+
+model WorkExperience {
+  id          Int       @id @default(autoincrement())
+  company     String
+  position    String
+  description String?
+  startDate   DateTime
+  endDate     DateTime?
+  candidateId Int
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
 }

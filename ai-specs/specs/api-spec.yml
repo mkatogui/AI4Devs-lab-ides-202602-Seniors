@@ -1,0 +1,328 @@
+openapi: 3.0.0
+info:
+  title: LTI Talent Tracking System API
+  description: |
+    REST API for the LTI (Talent Tracking System) ATS. Manages authentication and candidates
+    with optional education, work experience, and CV file upload.
+
+    ## Implemented features
+    - **Auth:** Login with email/password; JWT required for `/candidates`.
+    - **Candidates:** List (newest first) and create (JSON or multipart with optional CV).
+    - **CV:** PDF or DOCX, max 10MB; optional on create candidate.
+
+    ## Base URL
+    Backend runs at `http://localhost:3010`. Send `Authorization: Bearer <token>` for `/candidates`.
+  version: 1.0.0
+  contact:
+    name: LTI Development Team
+  license:
+    name: ISC
+
+servers:
+  - url: http://localhost:3010
+    description: Development server
+  - url: https://api.lti.example.com
+    description: Production (example)
+
+security:
+  - BearerAuth: []
+
+paths:
+  /:
+    get:
+      summary: Health / welcome
+      description: Simple root endpoint; no authentication.
+      tags:
+        - Health
+      security: []
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Hola LTI!"
+
+  /auth/login:
+    post:
+      summary: Login
+      description: |
+        Authenticate with email and password. Returns a JWT and user info.
+        Use the token in `Authorization: Bearer <token>` for `/candidates`.
+      tags:
+        - Auth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Email and password are required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Login failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /candidates:
+    get:
+      summary: List candidates
+      description: |
+        Returns all candidates, newest first. No pagination in current implementation.
+        Requires valid JWT.
+      tags:
+        - Candidates
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CandidateListResponse'
+        '401':
+          description: Authentication required or invalid/expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      summary: Create candidate
+      description: |
+        Create a new candidate. Accepts:
+        - **application/json:** `CreateCandidateRequest` (no file; omit CV or add later).
+        - **multipart/form-data:** Same fields as JSON; optional file field `cv` (PDF or DOCX, max 10MB).
+        For multipart, `educations` and `workExperiences` can be JSON strings.
+        Requires valid JWT.
+      tags:
+        - Candidates
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCandidateRequest'
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                firstName: { type: string }
+                lastName: { type: string }
+                email: { type: string, format: email }
+                phone: { type: string }
+                address: { type: string }
+                educations: { type: string, description: 'JSON array of EducationInput' }
+                workExperiences: { type: string, description: 'JSON array of WorkExperienceInput' }
+                cv: { type: string, format: binary, description: 'PDF or DOCX, max 10MB' }
+              required:
+                - firstName
+                - lastName
+                - email
+      responses:
+        '201':
+          description: Candidate created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCandidateResponse'
+        '400':
+          description: Validation error or email already registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authentication required or invalid/expired token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT from POST /auth/login
+
+  schemas:
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT for Authorization header
+        user:
+          type: object
+          properties:
+            id: { type: integer }
+            email: { type: string }
+            name: { type: string, nullable: true }
+          required: [id, email]
+
+    CandidateListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CandidateListItem'
+      required: [data]
+
+    CandidateListItem:
+      type: object
+      description: Candidate as returned in GET /candidates list
+      properties:
+        id: { type: integer }
+        firstName: { type: string }
+        lastName: { type: string }
+        email: { type: string, format: email }
+        phone: { type: string, nullable: true }
+        createdAt: { type: string, format: date-time }
+        cvFilePath: { type: string, nullable: true }
+      required: [id, firstName, lastName, email, createdAt]
+
+    CreateCandidateRequest:
+      type: object
+      properties:
+        firstName: { type: string }
+        lastName: { type: string }
+        email: { type: string, format: email }
+        phone: { type: string, nullable: true }
+        address: { type: string, nullable: true }
+        educations:
+          type: array
+          items:
+            $ref: '#/components/schemas/EducationInput'
+        workExperiences:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkExperienceInput'
+      required: [firstName, lastName, email]
+
+    EducationInput:
+      type: object
+      properties:
+        institution: { type: string }
+        title: { type: string }
+        startDate: { type: string, format: date-time }
+        endDate: { type: string, format: date-time, nullable: true }
+      required: [institution, title, startDate]
+
+    WorkExperienceInput:
+      type: object
+      properties:
+        company: { type: string }
+        position: { type: string }
+        description: { type: string, nullable: true }
+        startDate: { type: string, format: date-time }
+        endDate: { type: string, format: date-time, nullable: true }
+      required: [company, position, startDate]
+
+    Education:
+      type: object
+      description: Education as returned from API
+      properties:
+        id: { type: integer }
+        candidateId: { type: integer }
+        institution: { type: string }
+        title: { type: string }
+        startDate: { type: string, format: date-time }
+        endDate: { type: string, format: date-time, nullable: true }
+
+    WorkExperience:
+      type: object
+      description: Work experience as returned from API
+      properties:
+        id: { type: integer }
+        candidateId: { type: integer }
+        company: { type: string }
+        position: { type: string }
+        description: { type: string, nullable: true }
+        startDate: { type: string, format: date-time }
+        endDate: { type: string, format: date-time, nullable: true }
+
+    CreateCandidateResponse:
+      type: object
+      properties:
+        message: { type: string, example: 'Candidate created successfully' }
+        data:
+          type: object
+          properties:
+            id: { type: integer }
+            firstName: { type: string }
+            lastName: { type: string }
+            email: { type: string }
+            phone: { type: string, nullable: true }
+            address: { type: string, nullable: true }
+            cvFilePath: { type: string, nullable: true }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
+            educations:
+              type: array
+              items: { $ref: '#/components/schemas/Education' }
+            workExperiences:
+              type: array
+              items: { $ref: '#/components/schemas/WorkExperience' }
+          required: [id, firstName, lastName, email, createdAt, updatedAt]
+
+    ErrorResponse:
+      type: object
+      properties:
+        message: { type: string }
+        error: { type: string, description: 'Optional detail' }
+      required: [message]
+
+tags:
+  - name: Health
+    description: Root / health
+  - name: Auth
+    description: Authentication
+  - name: Candidates
+    description: Candidate management

@@ -2,6 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+**HTML entry point:** `public/index.html` — app shell, meta tags, and UDS theme (`data-theme="corporate"`). Edit this file to change the page title, description, or design system palette.
+
 ## Available Scripts
 
 In the project directory, you can run:
