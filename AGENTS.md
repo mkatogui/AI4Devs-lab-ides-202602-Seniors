@@ -2,7 +2,7 @@
 
 This project is developed with **Cursor**. Use this file as the main context for the AI when working in this repo.
 
-**Project:** LTI — Talent Tracking System. Full-stack ATS: React (Create React App) + Express (TypeScript) + Prisma + PostgreSQL. UI uses **Universal Design System (UDS)** only (`@mkatogui/uds-react`).
+**Project:** LTI — Talent Tracking System. Full-stack ATS: React (Create React App) + Express (TypeScript) + Prisma + PostgreSQL. UI uses **Universal Design System (UDS)** only (`@mkatogui/uds-react`). Follow **UDS getting started** (`.cursor/skills/uds-getting-started/SKILL.md`): use UDS tokens only in app CSS, no hardcoded values; use MCP and skills for design system queries.
 
 ## Rules and standards
 
@@ -16,7 +16,7 @@ This project is developed with **Cursor**. Use this file as the main context for
 | Base standards  | `ai-specs/specs/base-standards.mdc` |
 | Frontend specs | `ai-specs/specs/frontend-standards.mdc` |
 | Backend specs   | `ai-specs/specs/backend-standards.mdc` |
-| UDS usage       | `ai-specs/specs/uds-reference.md` |
+| UDS usage       | `ai-specs/specs/uds-reference.md` (includes UDS MCP Server) |
 | Cursor rules    | `.cursor/rules/use-base-rules.mdc` |
 | App entry HTML  | `frontend/public/index.html` (UDS `data-theme`) |
 | App entry JS    | `frontend/src/index.tsx`, `frontend/src/App.tsx` |

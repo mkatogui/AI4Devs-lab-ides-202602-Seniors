@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-/* App and base first, then UDS so design system styles take precedence */
+/* UDS first: load full design system (tokens + components) so app matches playground */
+import '@mkatogui/uds-react/styles.css';
 import './index.css';
 import './App.css';
-import '@mkatogui/uds-react/styles.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 

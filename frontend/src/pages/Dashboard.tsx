@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
+  Breadcrumb,
   Button,
   Card,
+  CardHeader,
   CardTitle,
   CardContent,
   CardFooter,
+  Container,
   Alert,
   DataTable,
   Skeleton,
@@ -85,14 +88,18 @@ function Dashboard() {
 
   return (
     <div className="Dashboard">
-      <main className="App-main">
-        <Card variant="icon-top">
-          <CardTitle>Recruiter dashboard</CardTitle>
+      <main className="App-main" aria-label="Recruiter dashboard">
+        <Container size="lg">
+          <Breadcrumb items={[{ label: 'Dashboard' }]} className="App-breadcrumb" />
+          <Card variant="icon-top" size="md">
+          <CardHeader>
+            <CardTitle>Recruiter dashboard</CardTitle>
+          </CardHeader>
           <CardContent>
-            <p>Add new candidates to the ATS, manage their data, and track selection processes.</p>
+            <p className="Card-intro">Add new candidates to the ATS, manage their data, and track selection processes.</p>
           </CardContent>
           <CardFooter>
-            <Link to="/candidates/new" style={{ textDecoration: 'none' }}>
+            <Link to="/candidates/new" className="App-link-button">
               <Button variant="primary" size="md" type="button" aria-label="Add a new candidate to the system">
                 Add candidate
               </Button>
@@ -100,8 +107,10 @@ function Dashboard() {
           </CardFooter>
         </Card>
 
-        <Card variant="icon-top" className="Dashboard-list-card">
-          <CardTitle>Added talent</CardTitle>
+        <Card variant="icon-top" size="md" className="Dashboard-list-card">
+          <CardHeader>
+            <CardTitle>Added talent</CardTitle>
+          </CardHeader>
           <CardContent>
             {error && (
               <Alert variant="error" message={error} className="Dashboard-list-alert" role="alert" />
@@ -120,6 +129,7 @@ function Dashboard() {
             )}
           </CardContent>
         </Card>
+        </Container>
       </main>
     </div>
   );

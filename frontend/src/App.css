@@ -1,285 +1,105 @@
-/* Modern app shell: UDS tokens + elevation + spacing */
+/* ============================================================
+   App shell & layout — UDS tokens only; no overrides of UDS components
+   ============================================================ */
+
 .App {
   min-height: 100vh;
-  text-align: center;
-  background: linear-gradient(180deg, var(--color-bg-secondary, #f8fafc) 0%, var(--color-bg-primary) 12rem);
+  background: var(--color-bg-primary);
   color: var(--color-text-primary);
 }
 
+.App-main {
+  padding: var(--space-8) 0 var(--space-12);
+  text-align: left;
+}
+
+.App-link-button {
+  text-decoration: none;
+  display: inline-flex;
+}
+.App-nav-logo {
+  color: inherit;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.App-breadcrumb {
+  margin-bottom: var(--space-6);
+}
+
+/* Optional page header (when needed) */
 .App-header {
   padding: var(--space-10) var(--space-6) var(--space-8);
   border-bottom: 1px solid var(--color-border-subtle);
   background: var(--color-bg-primary);
 }
-
 .App-header h1 {
   margin: 0 0 var(--space-2);
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 4vw, var(--text-heading-lg, 1.75rem));
+  font-size: var(--text-heading-lg);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--color-text-primary);
 }
-
 .App-intro {
   margin: 0;
-  font-size: var(--text-body-md, 1rem);
+  font-size: var(--text-body-md);
   color: var(--color-text-secondary);
   max-width: 36ch;
   margin-left: auto;
   margin-right: auto;
 }
 
-.App-main {
-  max-width: 1024px;
-  margin: 0 auto;
-  padding: var(--space-8) var(--space-6);
-  text-align: left;
-}
-
-/* UDS simple card pattern: .card with optional h3 title + children */
-.card {
-  background: var(--color-bg-primary);
-  border: 1px solid var(--color-border-default, var(--color-border-subtle));
-  border-radius: var(--radius-lg);
-  padding: var(--space-6);
-  box-shadow: var(--shadow-sm);
-}
-.card h3 {
-  margin: 0 0 var(--space-4);
-  font-size: var(--text-heading-md, 1.25rem);
-  font-weight: 600;
-  color: var(--color-text-primary);
-}
-
-/* Dashboard candidates list — card + table */
+/* ============================================================
+   Dashboard — spacing only; UDS Card & DataTable own styling
+   ============================================================ */
 .Dashboard-list-card {
-  margin-top: var(--space-6);
+  margin-top: var(--space-8);
 }
-
-.Dashboard-list-card .uds-card {
-  border-radius: var(--app-radius);
-  box-shadow: var(--app-shadow);
-}
-
-.Dashboard-list-message {
-  margin: 0;
-  font-size: var(--text-body-sm);
-  color: var(--color-text-secondary);
-}
-
 .Dashboard-list-alert {
   margin-bottom: 0;
 }
-
-.Dashboard-table-wrap {
-  overflow-x: auto;
-  margin-top: var(--space-2);
-  border-radius: var(--app-radius);
-  background: var(--color-bg-primary);
-  box-shadow: var(--app-shadow);
-}
-
-.Dashboard-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: var(--text-body-sm);
-}
-
-.Dashboard-table th,
-.Dashboard-table td {
-  padding: var(--space-3) var(--space-4);
-  text-align: left;
-  border-bottom: 1px solid var(--color-border-subtle);
-}
-
-.Dashboard-table th {
-  font-weight: 600;
-  font-size: 0.8125rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--color-text-secondary);
-  background: var(--color-bg-secondary, #f8fafc);
-}
-
-.Dashboard-table tbody tr:hover {
-  background: var(--color-bg-secondary, #f8fafc);
-}
-
-.Dashboard-table td {
-  color: var(--color-text-primary);
-}
-
-.App-main .uds-card {
-  text-align: left;
-  border-radius: var(--app-radius);
-  box-shadow: var(--app-shadow);
-  border: 1px solid var(--color-border-subtle);
-}
-
-.App-main > .uds-card:first-of-type {
-  border-radius: var(--app-radius);
-  box-shadow: var(--app-shadow-lg);
-  border: 1px solid var(--color-border-subtle);
-}
-
 .App-main [class*='uds-card__footer'] {
   display: flex;
   gap: var(--space-3);
   flex-wrap: wrap;
 }
-
-/* Form footer: UDS token-based border */
+/* ============================================================
+   Forms — UDS token-based; do not override .uds-input / .uds-btn
+   ============================================================ */
 .form-footer {
-  margin-top: var(--space-4);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--color-border-subtle);
-}
-
-/* Form layout: spacing between fields only; do not override UDS Input/Card internals */
-
-/* Add candidate form */
-.AddCandidate .form-alert {
-  margin-bottom: var(--space-4);
-}
-
-/* Login — UDS-aligned: tokens, elevation, motion, form pattern */
-.Login--uds {
-  min-height: 100vh;
-  background: linear-gradient(
-    180deg,
-    var(--color-bg-primary) 0%,
-    var(--color-bg-secondary) 30%,
-    var(--color-bg-secondary) 100%
-  );
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: var(--space-12);
-}
-
-.Login-hero {
-  padding: var(--space-12) var(--space-4) var(--space-8);
-  text-align: center;
-}
-
-.Login-hero .uds-hero__headline {
-  font-family: var(--font-display);
-  font-size: var(--text-heading-lg, clamp(1.75rem, 4vw, 2rem));
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.2;
-  color: var(--color-text-primary);
-  margin: 0 0 var(--space-2);
-}
-
-.Login-hero .uds-hero__subheadline {
-  font-size: var(--text-body-md, 1rem);
-  line-height: 1.5;
-  color: var(--color-text-secondary);
-  margin: 0;
-  max-width: 40ch;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.Login-main {
-  width: 100%;
-  max-width: 400px;
-  padding: 0 var(--space-4);
-}
-
-.Login-card {
-  background: var(--color-bg-primary);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--color-border-default, var(--color-border-subtle));
-  overflow: hidden;
-  transition: box-shadow var(--duration-fast) var(--ease-default),
-    transform var(--duration-fast) var(--ease-default);
-}
-
-@media (hover: hover) {
-  .Login-card:hover {
-    box-shadow: var(--shadow-xl);
-  }
-}
-
-.Login-cardTitle {
-  font-size: var(--text-heading-md, 1.25rem);
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin: 0 0 var(--space-4);
-}
-
-.Login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.Login-alert {
-  margin-bottom: var(--space-4);
-}
-
-.Login-field {
-  margin-top: var(--space-5);
-  width: 100%;
-}
-
-.Login-field:first-of-type {
-  margin-top: 0;
-}
-
-/* Align both inputs to same width; prevent email icon from stretching row */
-.Login-field .uds-input {
-  width: 100%;
-  min-width: 0;
-}
-
-.Login-field .uds-input__field {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-.Login-field .uds-input__helper {
-  margin-left: 0;
-  padding-left: 0;
-  text-align: left;
-}
-
-.Login-footer {
   margin-top: var(--space-6);
   padding-top: var(--space-5);
   border-top: 1px solid var(--color-border-subtle);
 }
 
-.Login-footer button[type="submit"] {
-  width: 100%;
-  min-height: 44px;
-  transition: filter var(--duration-fast) var(--ease-default),
-    box-shadow var(--duration-fast) var(--ease-default);
+.AddCandidate .form-alert {
+  margin-bottom: var(--space-4);
 }
-
-/* UDS Pattern: Forms — field-to-field gap --space-5 (20px) */
-.AddCandidate .form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-5);
-}
-
+/* UDS Grid: single column on small screens (form section fields) */
 @media (max-width: 640px) {
-  .AddCandidate .form-row {
+  .AddCandidate .uds-form-section__fields .uds-grid--cols-2 {
     grid-template-columns: 1fr;
   }
 }
-
 .AddCandidate .form-field {
-  margin-top: var(--space-5);
+  margin-top: 0;
 }
-
-/* UDS-aligned label (same as .uds-input__label) for FileUpload and custom fields */
+.AddCandidate .form-field--narrow {
+  max-width: 22.5rem;
+}
+.AddCandidate .form-helper--above-upload {
+  margin-top: 0;
+  margin-bottom: var(--space-2);
+}
+/* Shared intro paragraph (Dashboard & AddCandidate cards) */
+.Card-intro,
+.AddCandidate-intro {
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-md);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
 .AddCandidate .form-label {
   display: block;
   margin-bottom: var(--space-1);
@@ -288,8 +108,6 @@
   font-weight: 500;
   color: var(--color-text-primary);
 }
-
-/* Match UDS Input error styling (--text-label, --color-error) */
 .AddCandidate .form-error {
   display: block;
   margin-top: var(--space-1);
@@ -297,8 +115,6 @@
   font-size: var(--text-label);
   color: var(--color-error);
 }
-
-/* UDS Pattern: Forms — helper text matches .uds-input__helper (--text-label, --color-text-tertiary) */
 .AddCandidate .form-helper {
   margin: var(--space-2) 0 0;
   font-family: var(--font-sans);
@@ -306,49 +122,59 @@
   color: var(--color-text-tertiary);
 }
 
-/* UDS FileUpload dropzone content: icon + title + sub (matches design system markup) */
-.uds-file-upload__icon {
+/* ============================================================
+   Login — same content band as Dashboard/AddCandidate (App-main)
+   ============================================================ */
+.Login--uds {
+  min-height: 100vh;
+  background: var(--color-bg-primary);
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
+  padding-bottom: var(--space-12);
+}
+.Login-hero {
+  padding: var(--space-12) var(--space-6) var(--space-8);
+  text-align: center;
+}
+.Login .App-main {
+  display: flex;
   justify-content: center;
-  color: var(--color-text-tertiary);
-  margin-bottom: var(--space-2);
 }
-.uds-file-upload__icon svg {
-  width: 24px;
-  height: 24px;
-}
-.uds-file-upload__title {
-  font-family: var(--font-sans);
-  font-size: var(--text-body-md);
-  font-weight: 500;
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-1);
-}
-.uds-file-upload__sub {
-  font-family: var(--font-sans);
-  font-size: var(--text-label);
-  color: var(--color-text-tertiary);
+.Login-form-wrap {
+  width: 100%;
+  max-width: 420px;
 }
 
-/* Nav: modern pill-style links */
+/* ============================================================
+   Nav (inside UDS Navbar) — tokens only; active via aria-current
+   ============================================================ */
 .App-nav-link {
   padding: var(--space-2) var(--space-3);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  font-weight: 500;
   color: var(--color-text-secondary);
-  font-weight: var(--font-weight-regular, 400);
-  font-size: 0.9375rem;
-  transition: color 0.15s ease, background 0.15s ease;
+  transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
 }
-
 .App-nav-link:hover {
   color: var(--color-brand-primary);
-  background: var(--color-bg-secondary, rgba(0, 0, 0, 0.04));
+  background: var(--color-bg-tertiary);
 }
-
-.App-nav-link.active {
+.App-nav-link[aria-current="page"] {
   color: var(--color-brand-primary);
-  font-weight: var(--font-weight-semibold, 600);
-  background: var(--color-bg-secondary, rgba(0, 0, 0, 0.06));
+  font-weight: 600;
+  background: var(--color-bg-tertiary);
+}
+.App-nav-link--button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+.App-nav-link--button:hover {
+  color: var(--color-brand-primary);
+  background: var(--color-bg-tertiary);
 }

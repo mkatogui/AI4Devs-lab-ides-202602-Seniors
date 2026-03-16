@@ -28,13 +28,13 @@ function AppLayout({ children }: AppLayoutProps) {
         variant="standard"
         sticky
         logo={
-          <Link to="/" style={{ textDecoration: 'none', color: 'inherit', fontWeight: 600 }}>
+          <Link to="/" className="App-link-button App-nav-logo">
             LTI
           </Link>
         }
         ctaButton={
           !isAddCandidate ? (
-            <Link to="/candidates/new" style={{ textDecoration: 'none' }}>
+            <Link to="/candidates/new" className="App-link-button">
               <Button variant="primary" size="md">
                 Add candidate
               </Button>
@@ -42,13 +42,26 @@ function AppLayout({ children }: AppLayoutProps) {
           ) : undefined
         }
       >
-        <Link to="/" className={`App-nav-link ${location.pathname === '/' ? 'active' : ''}`}>
+        <Link
+          to="/"
+          className="App-nav-link"
+          aria-current={location.pathname === '/' ? 'page' : undefined}
+        >
           Dashboard
         </Link>
-        <Link to="/candidates/new" className={`App-nav-link ${isAddCandidate ? 'active' : ''}`}>
+        <Link
+          to="/candidates/new"
+          className="App-nav-link"
+          aria-current={isAddCandidate ? 'page' : undefined}
+        >
           Add candidate
         </Link>
-        <button type="button" onClick={handleLogout} className="App-nav-link" style={{ background: 'none', border: 'none', cursor: 'pointer', font: 'inherit' }}>
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="App-nav-link App-nav-link--button"
+          aria-label={user?.email ? `Log out (${user.email})` : 'Log out'}
+        >
           Log out {user?.email ? `(${user.email})` : ''}
         </button>
       </Navbar>

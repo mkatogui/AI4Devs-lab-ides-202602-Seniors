@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
+  Breadcrumb,
   Button,
   Card,
+  CardHeader,
   CardTitle,
   CardContent,
   CardFooter,
+  Container,
+  Form,
+  FormSection,
+  Grid,
   Input,
   Alert,
   FileUpload,
@@ -144,15 +150,24 @@ function AddCandidate() {
 
   return (
     <div className="AddCandidate">
-      <header className="App-header">
-        <h1>Add candidate</h1>
-        <p className="App-intro">Enter candidate information and optional CV (PDF or DOCX).</p>
-      </header>
-      <main className="App-main">
-        <Card variant="icon-top">
-          <CardTitle>New candidate</CardTitle>
+      <main className="App-main" aria-label="Add candidate">
+        <Container size="lg">
+          <Breadcrumb
+            items={[
+              { label: 'Dashboard', href: '/' },
+              { label: 'Add candidate' },
+            ]}
+            className="App-breadcrumb"
+          />
+          <Card variant="icon-top" size="md">
+          <CardHeader>
+            <CardTitle>New candidate</CardTitle>
+          </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} noValidate aria-label="Add candidate form">
+            <p className="Card-intro AddCandidate-intro">
+              Add a new candidate to the ATS. Fill in the required fields below; all others are optional.
+            </p>
+            <Form onSubmit={handleSubmit} noValidate aria-label="Add candidate form">
               {successMessage && (
                 <Alert variant="success" message={successMessage} className="form-alert" />
               )}
@@ -160,14 +175,17 @@ function AddCandidate() {
                 <Alert variant="error" message={errorMessage} className="form-alert" />
               )}
 
-              <div className="form-row">
-                <div className="form-field">
+              <FormSection
+                title="Name and contact"
+                description="Required fields are marked with an asterisk."
+              >
+                <Grid columns={2} gap="md">
                   <Input
                     id="firstName"
                     label="First name"
                     size="md"
                     required
-                    placeholder="Enter first name"
+                    placeholder="e.g. María"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     onBlur={handleBlur('firstName')}
@@ -175,14 +193,12 @@ function AddCandidate() {
                     disabled={loading}
                     autoComplete="given-name"
                   />
-                </div>
-                <div className="form-field">
                   <Input
                     id="lastName"
                     label="Last name"
                     size="md"
                     required
-                    placeholder="Enter last name"
+                    placeholder="e.g. García"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     onBlur={handleBlur('lastName')}
@@ -190,132 +206,126 @@ function AddCandidate() {
                     disabled={loading}
                     autoComplete="family-name"
                   />
+                </Grid>
+                <div className="form-field form-field--narrow">
+                  <Input
+                    id="email"
+                    label="Email address"
+                    type="email"
+                    size="md"
+                    required
+                    placeholder="maria@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onBlur={handleBlur('email')}
+                    errorText={errors.email}
+                    helperText="We'll use this to contact the candidate."
+                    disabled={loading}
+                    autoComplete="email"
+                  />
                 </div>
-              </div>
+              </FormSection>
 
-              <div className="form-field" style={{ maxWidth: '360px' }}>
-                <Input
-                  id="email"
-                  label="Email address"
-                  variant="email"
-                  size="md"
-                  required
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onBlur={handleBlur('email')}
-                  errorText={errors.email}
-                  helperText="We'll use this to contact the candidate."
-                  disabled={loading}
-                  autoComplete="email"
-                />
-              </div>
-
-              <div className="form-field">
+              <FormSection
+                title="Additional information"
+                description="Phone, address, education, and experience are optional."
+              >
                 <Input
                   id="phone"
                   label="Phone"
                   helperText="Optional"
-                  type="tel"
+                  type="text"
                   size="md"
+                  placeholder="+34 600 000 000"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   disabled={loading}
                   autoComplete="tel"
+                  inputMode="tel"
                 />
-              </div>
-
-              <div className="form-field">
                 <Input
                   id="address"
                   label="Address"
                   helperText="Optional"
                   size="md"
+                  placeholder="City, country"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   disabled={loading}
                   autoComplete="street-address"
                 />
-              </div>
-
-              <div className="form-field">
                 <Input
                   id="education"
                   label="Education"
                   helperText="Optional"
-                  variant="textarea"
+                  multiline
                   size="md"
+                  placeholder="Degrees, institutions, years"
                   value={education}
                   onChange={(e) => setEducation(e.target.value)}
                   disabled={loading}
                 />
-              </div>
-
-              <div className="form-field">
                 <Input
                   id="experience"
                   label="Work experience"
                   helperText="Optional"
-                  variant="textarea"
+                  multiline
                   size="md"
+                  placeholder="Previous roles and key achievements"
                   value={experience}
                   onChange={(e) => setExperience(e.target.value)}
                   disabled={loading}
                 />
-              </div>
+              </FormSection>
 
-              <div className="form-field">
-                <label htmlFor="cv-upload" className="form-label">
-                  CV
-                </label>
-                <p className="form-helper" style={{ marginTop: 0, marginBottom: 'var(--space-2)' }}>
-                  Optional. PDF or DOCX, up to 10MB.
-                </p>
-                <FileUpload
-                  id="cv-upload"
-                  variant="dropzone"
-                  size="md"
-                  accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                  maxSize={MAX_CV_SIZE}
-                  maxFiles={1}
-                  multiple={false}
-                  label="Drop files here or click to upload"
-                  onUpload={(files) => setCvFile(files[0] ?? null)}
-                  onRemove={() => setCvFile(null)}
-                  disabled={loading}
-                >
-                  <div className="uds-file-upload__icon" aria-hidden="true">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
-                      <polyline points="17 8 12 3 7 8" />
-                      <line x1="12" y1="3" x2="12" y2="15" />
-                    </svg>
-                  </div>
-                  <div className="uds-file-upload__title">
-                    Drop files here or <strong style={{ color: 'var(--color-brand-primary)' }}>browse</strong>
-                  </div>
-                  <div className="uds-file-upload__sub">Supports PDF, DOCX — up to 10MB</div>
-                </FileUpload>
-                {errors.cv && (
-                  <span className="form-error" role="alert">
-                    {errors.cv}
-                  </span>
-                )}
-              </div>
+              <FormSection
+                title="Resume"
+                description="Upload a CV in PDF or DOCX format (max 10MB)."
+              >
+                <div className="form-field form-field--file">
+                  <label htmlFor="cv-upload" className="form-label">
+                    CV file
+                  </label>
+                  <p className="form-helper form-helper--above-upload">
+                    Drag and drop here or click to browse.
+                  </p>
+                  <FileUpload
+                    id="cv-upload"
+                    variant="dropzone"
+                    size="md"
+                    accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    maxSize={MAX_CV_SIZE}
+                    maxFiles={1}
+                    multiple={false}
+                    label="CV upload (optional)"
+                    placeholderTitle="Drop files here or click to browse"
+                    placeholderDescription="PDF or DOCX, up to 10MB"
+                    onUpload={(files) => setCvFile(files[0] ?? null)}
+                    onRemove={() => setCvFile(null)}
+                    disabled={loading}
+                  />
+                  {errors.cv && (
+                    <span className="form-error" role="alert">
+                      {errors.cv}
+                    </span>
+                  )}
+                </div>
+              </FormSection>
 
               <CardFooter className="form-footer">
                 <Button type="submit" variant="primary" size="md" disabled={loading} aria-busy={loading}>
                   {loading ? 'Saving...' : 'Save candidate'}
                 </Button>
-                <Link to="/" style={{ textDecoration: 'none' }}>
+                <Link to="/" className="App-link-button">
                   <Button type="button" variant="secondary" size="md" disabled={loading}>
                     Back to dashboard
                   </Button>
                 </Link>
               </CardFooter>
-            </form>
+            </Form>
           </CardContent>
         </Card>
+        </Container>
       </main>
     </div>
   );

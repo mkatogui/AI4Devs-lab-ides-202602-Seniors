@@ -1,30 +1,25 @@
-/* UDS-aware base: use tokens after UDS loads (UDS loads after this) */
+/* Base: uses UDS tokens (loaded first in index.tsx). Do not override .uds-* classes. */
 :root {
-  --app-bg: var(--color-bg-primary, #fff);
-  --app-surface: var(--color-bg-secondary, #f8fafc);
-  --app-radius: var(--radius-lg, 12px);
-  --app-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.06));
-  --app-shadow-lg: 0 4px 12px rgba(0,0,0,0.08);
+  /* UDS form/login components expect these; map to UDS typography tokens */
+  --font-size-sm: var(--text-body-sm);
+  --font-size-base: var(--text-body-md);
+  --font-size-xl: var(--text-heading-md);
 }
-
 html {
   box-sizing: border-box;
 }
-
 *, *::before, *::after {
   box-sizing: inherit;
 }
-
 body {
   margin: 0;
-  font-family: var(--font-sans, Inter, system-ui, sans-serif);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: var(--app-bg);
-  color: var(--color-text-primary, #1a202c);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
   line-height: 1.5;
 }
-
 code {
   font-family: var(--font-mono);
 }

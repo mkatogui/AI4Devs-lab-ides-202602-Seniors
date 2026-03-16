@@ -2,6 +2,9 @@
   "name": "lti-talent-tracking",
   "private": true,
   "scripts": {
+    "build": "npm run build --prefix backend && npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix backend",
+    "build:frontend": "npm run build --prefix frontend",
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm run start --prefix frontend\"",
     "dev:backend": "npm run dev --prefix backend",
     "dev:frontend": "npm run start --prefix frontend"
@@ -10,6 +13,7 @@
     "concurrently": "^9.0.0"
   },
   "dependencies": {
-    "@mkatogui/universal-design-system": "^0.4.2"
+    "@mkatogui/uds-mcp-server": "^0.5.1",
+    "@mkatogui/universal-design-system": "^0.5.1"
   }
 }

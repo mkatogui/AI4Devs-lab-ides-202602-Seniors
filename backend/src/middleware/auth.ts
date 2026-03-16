@@ -18,7 +18,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
   }
 
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as AuthPayload;
+    const payload = jwt.verify(token, JWT_SECRET) as unknown as AuthPayload;
     (req as Request & { user?: AuthPayload }).user = payload;
     next();
   } catch {
