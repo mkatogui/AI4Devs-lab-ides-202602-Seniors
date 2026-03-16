@@ -6,7 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import AddCandidate from './pages/AddCandidate';
-import './App.css';
+/* App.css loaded in index.tsx before UDS so UDS wins */
 
 function App() {
   return (

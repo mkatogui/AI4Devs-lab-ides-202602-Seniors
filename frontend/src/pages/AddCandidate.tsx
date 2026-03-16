@@ -161,7 +161,7 @@ function AddCandidate() {
               )}
 
               <div className="form-row">
-                <div className="uds-input-group form-field">
+                <div className="form-field">
                   <Input
                     id="firstName"
                     label="First name"
@@ -176,7 +176,7 @@ function AddCandidate() {
                     autoComplete="given-name"
                   />
                 </div>
-                <div className="uds-input-group form-field">
+                <div className="form-field">
                   <Input
                     id="lastName"
                     label="Last name"
@@ -193,7 +193,7 @@ function AddCandidate() {
                 </div>
               </div>
 
-              <div className="uds-input-group form-field" style={{ maxWidth: '360px' }}>
+              <div className="form-field" style={{ maxWidth: '360px' }}>
                 <Input
                   id="email"
                   label="Email address"
@@ -211,10 +211,11 @@ function AddCandidate() {
                 />
               </div>
 
-              <div className="uds-input-group form-field">
+              <div className="form-field">
                 <Input
                   id="phone"
-                  label="Phone (optional)"
+                  label="Phone"
+                  helperText="Optional"
                   type="tel"
                   size="md"
                   value={phone}
@@ -224,10 +225,11 @@ function AddCandidate() {
                 />
               </div>
 
-              <div className="uds-input-group form-field">
+              <div className="form-field">
                 <Input
                   id="address"
-                  label="Address (optional)"
+                  label="Address"
+                  helperText="Optional"
                   size="md"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
@@ -236,10 +238,11 @@ function AddCandidate() {
                 />
               </div>
 
-              <div className="uds-input-group form-field">
+              <div className="form-field">
                 <Input
                   id="education"
-                  label="Education (optional)"
+                  label="Education"
+                  helperText="Optional"
                   variant="textarea"
                   size="md"
                   value={education}
@@ -248,10 +251,11 @@ function AddCandidate() {
                 />
               </div>
 
-              <div className="uds-input-group form-field">
+              <div className="form-field">
                 <Input
                   id="experience"
-                  label="Work experience (optional)"
+                  label="Work experience"
+                  helperText="Optional"
                   variant="textarea"
                   size="md"
                   value={experience}
@@ -262,8 +266,11 @@ function AddCandidate() {
 
               <div className="form-field">
                 <label htmlFor="cv-upload" className="form-label">
-                  CV (optional)
+                  CV
                 </label>
+                <p className="form-helper" style={{ marginTop: 0, marginBottom: 'var(--space-2)' }}>
+                  Optional. PDF or DOCX, up to 10MB.
+                </p>
                 <FileUpload
                   id="cv-upload"
                   variant="dropzone"

@@ -1,19 +1,27 @@
-/* UDS + modern base: tokens, typography, soft background */
+/* UDS-aware base: use tokens after UDS loads (UDS loads after this) */
 :root {
-  --app-bg: var(--color-bg-primary);
+  --app-bg: var(--color-bg-primary, #fff);
   --app-surface: var(--color-bg-secondary, #f8fafc);
-  --app-radius: 12px;
-  --app-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --app-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --app-radius: var(--radius-lg, 12px);
+  --app-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,0.06));
+  --app-shadow-lg: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
 }
 
 body {
   margin: 0;
-  font-family: var(--font-sans);
+  font-family: var(--font-sans, Inter, system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: var(--app-bg);
-  color: var(--color-text-primary);
+  color: var(--color-text-primary, #1a202c);
   line-height: 1.5;
 }
 

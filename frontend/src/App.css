@@ -136,18 +136,7 @@
   border-top: 1px solid var(--color-border-subtle);
 }
 
-/* UDS Pattern: Forms — "Do not use asterisks." Required state is kept for aria-required. */
-.uds-input__required {
-  display: none;
-}
-
-/* UDS form structure: input group (label + input + helper), max-width 360px in docs */
-.uds-input-group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  width: 100%;
-}
+/* Form layout: spacing between fields only; do not override UDS Input/Card internals */
 
 /* Add candidate form */
 .AddCandidate .form-alert {
@@ -290,26 +279,30 @@
   margin-top: var(--space-5);
 }
 
-/* UDS Pattern: Forms — label-to-input gap --space-1 (4px) */
+/* UDS-aligned label (same as .uds-input__label) for FileUpload and custom fields */
 .AddCandidate .form-label {
   display: block;
   margin-bottom: var(--space-1);
-  font-weight: var(--font-weight-medium, 500);
+  font-family: var(--font-sans);
   font-size: var(--text-body-sm);
+  font-weight: 500;
   color: var(--color-text-primary);
 }
 
+/* Match UDS Input error styling (--text-label, --color-error) */
 .AddCandidate .form-error {
   display: block;
   margin-top: var(--space-1);
-  font-size: var(--text-body-sm);
+  font-family: var(--font-sans);
+  font-size: var(--text-label);
   color: var(--color-error);
 }
 
-/* UDS Pattern: Forms — help text uses --color-text-tertiary, --text-body-sm, aria-describedby */
+/* UDS Pattern: Forms — helper text matches .uds-input__helper (--text-label, --color-text-tertiary) */
 .AddCandidate .form-helper {
   margin: var(--space-2) 0 0;
-  font-size: var(--text-body-sm);
+  font-family: var(--font-sans);
+  font-size: var(--text-label);
   color: var(--color-text-tertiary);
 }
 
@@ -326,13 +319,15 @@
   height: 24px;
 }
 .uds-file-upload__title {
+  font-family: var(--font-sans);
   font-size: var(--text-body-md);
   font-weight: 500;
   color: var(--color-text-primary);
   margin-bottom: var(--space-1);
 }
 .uds-file-upload__sub {
-  font-size: var(--text-body-sm);
+  font-family: var(--font-sans);
+  font-size: var(--text-label);
   color: var(--color-text-tertiary);
 }
 

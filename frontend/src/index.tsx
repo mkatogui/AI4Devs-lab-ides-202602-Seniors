@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-/* UDS: one import — React styles include tokens and palette overrides */
-import '@mkatogui/uds-react/styles.css';
+/* App and base first, then UDS so design system styles take precedence */
 import './index.css';
+import './App.css';
+import '@mkatogui/uds-react/styles.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
